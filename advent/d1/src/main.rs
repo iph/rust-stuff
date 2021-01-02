@@ -6,15 +6,6 @@ struct Config {
     filename: String,
 }
 
-struct Pair {
-    a: i32,
-    b: i32,
-}
-
-struct Answer {
-    vals: Vec<i32>
-}
-
 impl Config {
     fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
         if args.len() < 2 {
