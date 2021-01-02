@@ -1,11 +1,18 @@
 use std::env;
 use std::fs;
 use std::process;
-use std::collections::HashMap;
-
 
 struct Config {
     filename: String,
+}
+
+struct Pair {
+    a: i32,
+    b: i32,
+}
+
+struct Answer {
+    vals: Vec<i32>
 }
 
 impl Config {
@@ -41,14 +48,54 @@ fn main() {
         });
     
     let lines = get_lines(config).unwrap();
-    let mut check: HashMap<i32, bool>  = HashMap::new();
-    for i in lines { 
-        let other = 2020 - i;
-        
-        match check.get(&other) {
-            Some(_) => println!("Found a match {}!", other*i),
-            _ => {},
+    'outer: for i in lines.iter() {
+        for j in lines.iter() {
+            for k in lines.iter(){
+                if i+j+k == 2020 {
+                    println!("{}, {}, {}: {}", i, j, k, (i*j*k));
+                    break 'outer;
+                }
+            }
         }
-        check.insert(i, true);
     }
+}
+
+
+fn core_loop(lines: &Vec<i32>, mut answer: Vec<i32>, place: usize, max_ans: u32) -> Result<Answer, &'static str> {
+    let mut place = place;
+    loop {
+        place = place + 1;
+
+        if check_answer(&answer) && answer.len() == (max_ans as usize) {
+            return Ok(Answer{vals: answer.clone()});
+        }
+
+        if answer.len() > (max_ans as usize) {
+            return Err("Boot too big");
+        }
+
+        if place >= lines.len() {
+            return Err("Didn't find shit")
+        }
+
+        answer.push(lines[place]);
+
+        match core_loop(lines, answer.clone(), place, max_ans){
+            Ok(ans) => return Ok(ans),
+            Err(_) => {
+                answer.pop();
+                continue
+            },
+        }
+
+    }
+}
+
+fn check_answer(answer: &Vec<i32>) -> bool {
+    let mut sum = 0;
+    for i in answer {
+        sum = i + sum;
+    }
+
+    return sum == 2020;
 }
