@@ -1,5 +1,4 @@
 use std::fs;
-use std::process;
 use clap::{App, Arg};
 
 #[derive(Debug, PartialEq, Clone)]
@@ -10,8 +9,8 @@ enum Space {
 
 #[derive(Debug, PartialEq, Clone)]
 struct Direction {
-    Right: i32,
-    Down: i32,
+    right: i32,
+    down: i32,
 }
 
 impl Space {
@@ -89,8 +88,10 @@ impl InfiniteBoard {
         let mut observed: Vec<Space> = Vec::new();
         
         loop {
-            current_row += direction.Down;
-            current_column += direction.Right;
+            current_row += direction.down
+    
+    ;
+            current_column += direction.right;
 
             if current_row as usize >= self.rows.len() {
                 break;
@@ -114,7 +115,9 @@ fn test_traverse(){
 ..
 ##";
     let board = InfiniteBoard::new(contents.to_owned()).unwrap();
-    let path = board.traverse(Direction{Right:1, Down: 1});
+    let path = board.traverse(Direction{right:1, down
+
+: 1});
     assert_eq!(vec!(Space::Clear, Space::Tree), path.observed)
 }
 
@@ -133,7 +136,9 @@ fn main() {
     let board = InfiniteBoard::new(contents).unwrap();
 
     // part 1
-    let path = board.traverse(Direction{Right:3, Down: 1});
+    let path = board.traverse(Direction{right:3, down
+
+: 1});
 
     let mut tree_accumulator = 0;
     for space in path.observed {
@@ -146,7 +151,13 @@ fn main() {
     println!("Trees seen {}", tree_accumulator);
 
     // part 2
-    let all_puzzles = vec!(Direction{Right:1, Down:1}, Direction{Right:3, Down: 1}, Direction{Right:5, Down:1}, Direction{Right: 7, Down:1}, Direction{Right:1, Down:2});
+    let all_puzzles = vec!(Direction{right:1, down
+
+:1}, Direction{right:3, down
+: 1}, Direction{right:5, down
+:1}, Direction{right: 7, down
+:1}, Direction{right:1, down
+:2});
 
     
     let mut full_accumulator = 1;
