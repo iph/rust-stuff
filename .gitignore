@@ -13,3 +13,6 @@ Cargo.lock
 .idea/*
 **/test.txt
 **/*.pkrvars.hcl
+**/*.terraform
+**/*.tfstate
+**/*.terraform.lock.hcl
