@@ -6,4 +6,4 @@ Type=simple
 ExecStart=/usr/bin/srv
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target  
