@@ -233,6 +233,8 @@ fn main() {
     let contents = fs::read_to_string(txt_location).unwrap();
 
     let solver = BagSolver::new(&contents).unwrap();
+    let first = solver.solve();
+    println!("{:?}", first);
     let result = solver.solve_reverse();
     println!("{:?}", result-1);
 }

@@ -12,7 +12,13 @@ Cargo.lock
 *.iml
 .idea/*
 **/test.txt
+**/test2.txt
+**DS_Store
 **/*.pkrvars.hcl
 **/*.terraform
 **/*.tfstate
 **/*.terraform.lock.hcl
+
+#Added by cargo
+
+/target
