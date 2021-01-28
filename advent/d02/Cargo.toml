@@ -1,5 +1,5 @@
 [package]
-name = "d2"
+name = "d02"
 version = "0.1.0"
 authors = ["Sean Tyler Myers <seanmyers0608@gmail.com>"]
 edition = "2018"
