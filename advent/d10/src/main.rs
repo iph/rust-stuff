@@ -71,14 +71,12 @@ impl JoltSolution1 {
 
 #[derive(Debug, PartialEq, PartialOrd, Clone)]
 struct JoltBag {
-    path: Vec<JoltAdapter>,
     current: i32
 }
 
 impl JoltBag {
     fn new(current: i32) -> JoltBag {
         JoltBag{
-            path: Vec::new(),
             current
         }
     }
@@ -87,7 +85,6 @@ impl JoltBag {
             Some(x) => {
                 let mut cloned = self.clone();
                 cloned.current = adapter.rating;
-                cloned.path.push(adapter);
                 Option::Some(cloned)
             },
             None => {
@@ -101,7 +98,7 @@ impl JoltBag {
 impl JoltSolver {
     fn parse(contents: String, current: i32) -> JoltSolver{
         let mut adapters: Vec<JoltAdapter> = Vec::new();
-
+        adapters.push(JoltAdapter::new(0));
         for x in contents.lines() {
             let rating = x.parse::<i32>().unwrap();
             let adapter = JoltAdapter::new(rating);
@@ -136,27 +133,19 @@ impl JoltSolver {
         return Result::Ok(solution);
     }
 
-    fn solve2(&self) -> Result<Vec<JoltBag>, &str> {
-        let mut solutions: Vec<JoltBag> = Vec::new();
-
-        let mut jb = JoltBag::new(self.start);
-        solutions.push(jb);
-        for x in self.adapters.iter(){
-            let mut next_iter: Vec<JoltBag> = Vec::new();
-            for solution in solutions.clone() {
-                let possible_path = solution.clone();
-                match solution.add(x.clone()) {
-                    Some(x) => {
-                        next_iter.push(possible_path);
-                        next_iter.push(x);
-                    },
-                    None => {}
-                };
+    fn solve2(&self) -> Result<u128, &str> {
+        let mut counts: Vec<u128> = Vec::new();
+        counts.resize(self.adapters.len(), 0);
+        counts[0] = 1;
+        for x in 0..self.adapters.len(){
+            for y in 1..4 {
+                if x+y < counts.len() && self.adapters[x+y].rating <= self.adapters[x].rating + 3 {
+                    counts[x+y] += counts[x]
+                }
             }
-            solutions = next_iter;
         }
 
-        return Result::Ok(solutions)
+        return Result::Ok(counts[self.adapters.len()-1])
     }
 }
 
@@ -177,6 +166,7 @@ fn test_jolt_solver(){
 ";
     let mut solver = JoltSolver::parse(content.to_owned(), 0);
     assert_eq!(vec![
+        JoltAdapter::new(0),
         JoltAdapter::new(1),
         JoltAdapter::new(4),
         JoltAdapter::new(5),
@@ -215,15 +205,8 @@ fn test_jolt_solver_part2(){
 ";
     let mut solver = JoltSolver::parse(content.to_owned(), 0);
     let result = solver.solve2().unwrap();
-    let len = result.len();
-    println!("{:?}", result);
-    for solution in result.iter() {
-        for adapter in solution.path.iter() {
-            print!("{} ", adapter.rating)
-        }
-        println!()
-    }
-    assert_eq!(8, len/2);
+    let len = result;
+    assert_eq!(8, len);
 }
 
 
@@ -307,7 +290,7 @@ fn test_jolt_solver2_longer(){
     let mut solver = JoltSolver::parse(content.to_owned(), 0);
     let result = solver.solve2().unwrap();
 
-    assert_eq!(19208, result.len()/2);
+    assert_eq!(19208, result);
 }
 
 
@@ -332,5 +315,5 @@ fn main() {
     println!("{} * {} = {}", solution1.jolt_1, solution1.jolt_3, solution1.jolt_1 * solution1.jolt_3);
 
     let solution2 = solver.solve2().unwrap();
-    println!("{}", solution2.len()/2)
+    println!("{}", solution2)
 }
