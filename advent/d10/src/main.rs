@@ -1,7 +1,7 @@
 use clap::{App, Arg};
 use std::fs;
 
-#[derive(Debug, PartialEq, PartialOrd, Clone, Eq, Ord)]
+#[derive(Debug, PartialEq, PartialOrd, Copy, Clone, Eq, Ord)]
 struct JoltAdapter {
     rating: i32,
 }
@@ -68,33 +68,6 @@ impl JoltSolution1 {
     }
 }
 
-
-#[derive(Debug, PartialEq, PartialOrd, Clone)]
-struct JoltBag {
-    current: i32
-}
-
-impl JoltBag {
-    fn new(current: i32) -> JoltBag {
-        JoltBag{
-            current
-        }
-    }
-    fn add(&self, adapter: JoltAdapter) -> Option<JoltBag> {
-        return match adapter.handle(self.current, 3) {
-            Some(x) => {
-                let mut cloned = self.clone();
-                cloned.current = adapter.rating;
-                Option::Some(cloned)
-            },
-            None => {
-                Option::None
-            }
-        }
-    }
-}
-
-
 impl JoltSolver {
     fn parse(contents: String, current: i32) -> JoltSolver{
         let mut adapters: Vec<JoltAdapter> = Vec::new();
@@ -106,7 +79,7 @@ impl JoltSolver {
         }
 
         adapters.sort();
-        let highest_device = adapters.get(adapters.len()-1).unwrap();
+        let highest_device = adapters[adapters.len()-1];
         adapters.push(JoltAdapter{rating: highest_device.rating+3});
 
         return JoltSolver{
@@ -164,7 +137,7 @@ fn test_jolt_solver(){
 12
 4
 ";
-    let mut solver = JoltSolver::parse(content.to_owned(), 0);
+    let solver = JoltSolver::parse(content.to_owned(), 0);
     assert_eq!(vec![
         JoltAdapter::new(0),
         JoltAdapter::new(1),
@@ -203,7 +176,7 @@ fn test_jolt_solver_part2(){
 12
 4
 ";
-    let mut solver = JoltSolver::parse(content.to_owned(), 0);
+    let solver = JoltSolver::parse(content.to_owned(), 0);
     let result = solver.solve2().unwrap();
     let len = result;
     assert_eq!(8, len);
@@ -245,7 +218,7 @@ fn test_jolt_solver_longer(){
 10
 3
 ";
-    let mut solver = JoltSolver::parse(content.to_owned(), 0);
+    let solver = JoltSolver::parse(content.to_owned(), 0);
     let result = solver.solve().unwrap();
 
     assert_eq!(22, result.jolt_1);
@@ -287,7 +260,7 @@ fn test_jolt_solver2_longer(){
 10
 3
 ";
-    let mut solver = JoltSolver::parse(content.to_owned(), 0);
+    let solver = JoltSolver::parse(content.to_owned(), 0);
     let result = solver.solve2().unwrap();
 
     assert_eq!(19208, result);
