@@ -314,17 +314,17 @@ fn test_jolt_solver2_longer(){
 fn main() {
     let matches = App::new("Reader for advent")
         .version("1.0")
-        .author("Sean Tyler Myers <seanmyers0608@gmail.com")
+        .author("Sean Tyler Myers <seanmyers0608@gmail.com>")
         .about("Reads advent calendar programs")
         .arg(
-            Arg::new("Input")
+            Arg::new("INPUT")
                 .about("Sets the input file to use")
                 .required(true)
-                .index(1)
+                .index(1),
         )
         .get_matches();
 
-    let txt_location = matches.value_of("INPUT").unwrap();
+    let txt_location: &str = matches.value_of("INPUT").unwrap();
     let contents = fs::read_to_string(txt_location).unwrap();
     let solver = JoltSolver::parse(contents.to_owned(), 0);
     let solution1 = solver.solve().unwrap();
